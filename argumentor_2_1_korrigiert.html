@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ArguMentor 2.1</title>
+<style>
+:root{
+  --bg:#0f172a; --card:#fff; --ink:#172033; --muted:#64748b; --primary:#38599b;
+  --primaryDark:#274579; --accent:#8ea4d6; --line:#dbe4f0; --soft:#eef4ff;
+  --good:#146c4c; --goodBg:#eaf8f1; --bad:#9b2c2c; --badBg:#fff1f1; --warn:#8a5a10; --warnBg:#fff8e8;
+  --shadow:0 18px 55px rgba(0,0,0,.22);
+}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;color:var(--ink);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:radial-gradient(circle at 5% 0%,rgba(92,118,170,.75),transparent 28%),linear-gradient(135deg,var(--bg),#111827 60%,#0b1020)}
+.app{max-width:1180px;margin:0 auto;padding:24px 14px 44px}
+.hero{border:1px solid rgba(255,255,255,.18);border-radius:28px;color:white;padding:26px 28px;background:linear-gradient(135deg,rgba(255,255,255,.14),rgba(255,255,255,.05));box-shadow:var(--shadow)}
+.brand{display:flex;align-items:center;gap:14px;flex-wrap:wrap}.logo{width:54px;height:54px;border-radius:18px;background:white;color:var(--primary);display:flex;align-items:center;justify-content:center;font-weight:950;font-size:1.35rem;box-shadow:0 12px 25px rgba(0,0,0,.18)}
+.hero h1{margin:0;font-size:clamp(2.1rem,5vw,4rem);letter-spacing:-.055em}.subtitle{font-size:1.14rem;margin:12px 0 0;line-height:1.52;color:#edf4ff;max-width:920px}
+.panel{margin-top:18px;background:var(--card);border-radius:26px;padding:20px;box-shadow:var(--shadow)}
+.top{display:grid;grid-template-columns:1.2fr .8fr .8fr;gap:12px}.stat{border:1px solid var(--line);border-radius:19px;background:#fbfcff;padding:14px 15px}.stat small{display:block;color:var(--muted);font-weight:850;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase}.stat strong{font-size:1.18rem}
+.meter{height:11px;background:#e8edf7;border-radius:99px;overflow:hidden;margin-top:9px}.meter span{display:block;height:100%;width:0;background:linear-gradient(90deg,#8aa2d8,#365895);transition:.25s}
+button{border:0;border-radius:999px;padding:11px 16px;font-weight:850;cursor:pointer;background:var(--primary);color:white;box-shadow:0 8px 17px rgba(56,89,155,.25);transition:.12s transform,.12s background}button:hover{transform:translateY(-1px);background:var(--primaryDark)}button.secondary{background:#eef3fb;color:var(--primary);border:1px solid var(--line);box-shadow:none}button.ghost{background:white;color:var(--primary);border:1px solid var(--line);box-shadow:none}button.tab{background:#f2f5fb;color:var(--primary);border:1px solid var(--line);box-shadow:none}button.tab.active{background:var(--primary);color:white}button:disabled{opacity:.55;cursor:not-allowed;transform:none}
+.tabs,.controls,.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}.card{margin-top:16px;border:1px solid var(--line);border-radius:24px;padding:22px;background:linear-gradient(180deg,#fff,#fbfcff)}
+.badge{display:inline-flex;border-radius:999px;background:var(--soft);color:var(--primary);padding:7px 11px;font-size:.82rem;font-weight:900;margin-bottom:12px}.prompt{font-size:1.17rem;font-weight:880;line-height:1.42;margin:2px 0 10px}.context{border-left:4px solid var(--accent);background:#f6f8fe;border-radius:0 16px 16px 0;padding:13px 15px;color:#263149;line-height:1.57;margin:13px 0 6px}.source{font-size:.82rem;color:var(--muted);margin:6px 0 12px}.small{color:var(--muted);font-size:.94rem;line-height:1.5}
+.options{display:grid;gap:10px;margin-top:13px}.option{text-align:left;background:white;color:var(--ink);border:1px solid var(--line);border-radius:17px;padding:14px 15px;box-shadow:none;line-height:1.42;font-weight:680}.option:hover{background:#f6f8ff}.option.selected{outline:3px solid rgba(56,89,155,.2);border-color:var(--primary)}.option.correct{background:var(--goodBg);border-color:#9dd6c0;color:var(--good)}.option.wrong{background:var(--badBg);border-color:#e0aaaa;color:var(--bad)}
+.feedback{display:none;margin-top:15px;border-radius:18px;padding:15px 16px;line-height:1.52}.feedback.good{display:block;background:var(--goodBg);border:1px solid #adddcc;color:var(--good)}.feedback.bad{display:block;background:var(--warnBg);border:1px solid #efcf91;color:var(--warn)}
+textarea{width:100%;border:1px solid var(--line);border-radius:17px;padding:13px 14px;font:inherit;line-height:1.5;min-height:116px;resize:vertical}.hidden{display:none!important}
+.modeCards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:16px}.mode{border:1px solid var(--line);border-radius:19px;padding:16px;background:#fbfcff}.mode h3{margin:0 0 6px}.mode p{margin:0 0 12px;color:var(--muted);line-height:1.45}
+.dbWrap{max-height:540px;overflow:auto;border:1px solid var(--line);border-radius:18px;margin-top:12px}table{width:100%;border-collapse:collapse;font-size:.91rem}th,td{border-bottom:1px solid var(--line);padding:10px 11px;vertical-align:top;text-align:left}th{position:sticky;top:0;background:#f5f7fc;color:#23314a;z-index:1}.chip{display:inline-block;background:#eef3fb;color:var(--primary);border-radius:999px;padding:5px 9px;font-size:.78rem;font-weight:850;margin:2px}
+.errgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:12px}.err{border:1px solid var(--line);border-radius:16px;padding:12px;background:#fbfcff}.err strong{display:block}.err span{color:var(--muted);font-size:.9rem}
+.rulebox{border:1px solid var(--line);border-radius:17px;background:#fbfcff;padding:13px 14px;margin-top:12px}
+@media(max-width:860px){.top{grid-template-columns:1fr}.hero,.panel{border-radius:20px}.app{padding:14px 10px}.hero{padding:22px}.dbWrap{font-size:.84rem}}
+</style>
+</head>
+<body>
+<div class="app">
+<section class="hero">
+  <div class="brand"><div class="logo">A</div><h1>ArguMentor</h1></div>
+  <p class="subtitle"><strong>Philosophische Argumentationen rekonstruieren.</strong><br>Trainiere an konkreten Textstellen, argumentative Funktionen zu erkennen, passende performative Verben zu wählen und fremde Positionen korrekt wiederzugeben.</p>
+</section>
+<section class="panel">
+  <div class="top">
+    <div class="stat"><small>Fortschritt</small><strong id="progressText">Noch keine Runde gestartet</strong><div class="meter"><span id="progressBar"></span></div></div>
+    <div class="stat"><small>Punkte</small><strong id="scoreText">0</strong></div>
+    <div class="stat"><small>Runde</small><strong id="roundText">Training wählen</strong></div>
+  </div>
+  <div class="tabs">
+    <button class="tab active" id="tabTrain" onclick="showTab('train')">Training</button>
+    <button class="tab" id="tabDb" onclick="showTab('db')">Verb-Datenbank</button>
+    <button class="tab" id="tabGuide" onclick="showTab('guide')">Konjunktiv-Regeln</button>
+  </div>
+  <div id="trainView">
+    <div class="modeCards" id="startScreen">
+      <div class="mode"><h3>Schnelle Runde</h3><p>8 zufällige Aufgaben. Gut zum Wiederholen.</p><button onclick="startGame(8,'Schnelle Runde')">Starten</button></div>
+      <div class="mode"><h3>Klausurtraining</h3><p>12 Aufgaben mit Fokus auf Textstellen, Verben und Konjunktiv.</p><button onclick="startGame(12,'Klausurtraining')">Starten</button></div>
+      <div class="mode"><h3>Intensivtraining</h3><p>16 Aufgaben. Die Auswahl berücksichtigt bisherige Unsicherheiten.</p><button onclick="startGame(16,'Intensivtraining')">Starten</button></div>
+    </div>
+    <div class="controls"><button class="secondary" onclick="resetTraining()">Training zurücksetzen</button></div>
+    <div id="game" class="card hidden"></div>
+    <div id="summary" class="card hidden"></div>
+  </div>
+  <div id="dbView" class="hidden"><div class="card"><span class="badge">Hintergrunddatenbank</span><div class="prompt">Performative Verben nach argumentativer Funktion</div><p class="small">Die Beispiele sind als Muster für distanzierte Wiedergabe formuliert. Bei gleichlautenden Konjunktiv-I-Formen wird zur Eindeutigkeit Konjunktiv II verwendet.</p><div class="dbWrap"><table id="dbTable"></table></div></div></div>
+  <div id="guideView" class="hidden"><div class="card">
+    <span class="badge">Regelwissen</span><div class="prompt">Konjunktiv I und Konjunktiv II in der Textwiedergabe</div>
+    <div class="rulebox"><strong>Grundregel</strong><br><span class="small">Das performative Verb steht in der Regel im Indikativ: „Der Autor begründet …“. Die wiedergegebene Aussage steht im Konjunktiv I: „…, der Mensch <em>sei</em> zur Geselligkeit veranlagt.“</span></div>
+    <div class="rulebox"><strong>Konjunktiv II als Ersatzform</strong><br><span class="small">Wenn der Konjunktiv I mit dem Indikativ identisch ist, wird zur eindeutigen Markierung häufig der Konjunktiv II verwendet. Beispiel: „sie haben“ → Konjunktiv I: „sie haben“ ist nicht erkennbar; daher: „sie hätten“.</span></div>
+    <div class="rulebox"><strong>Keine Bewertung in Aufgabe 1</strong><br><span class="small">Nicht: „Der Autor hat recht, dass …“. Besser: „Der Autor vertritt die Auffassung, …“</span></div>
+  </div></div>
+</section>
+</div>
+<script>
+const DB = [
+{area:"Problem entwickeln",verbs:["thematisiert","problematisiert","wirft die Frage auf","fragt nach","untersucht","geht der Frage nach"],explicit:["Die Frage lautet","Zu klären ist","Problematisch ist"],implicit:["Spannung oder Gegensatz wird eröffnet","Krise wird als Ausgangspunkt beschrieben"],confuse:["kritisiert","begründet"],example:"Der Autor problematisiert, dass moderne Gesellschaften Misstrauen hervorbrächten."},
+{area:"These / Position",verbs:["behauptet","stellt die These auf","vertritt die Auffassung","geht davon aus","nimmt an","setzt voraus"],explicit:["Ich behaupte","meine These ist","ich gehe davon aus"],implicit:["zentrale Aussage trägt den weiteren Gedankengang","Prämisse wird zugrunde gelegt"],confuse:["begründet","erläutert"],example:"Der Autor stellt die These auf, dem Aggressionstrieb stünden natürliche Gegenspieler gegenüber."},
+{area:"Diagnose / Befund",verbs:["diagnostiziert","stellt fest","konstatiert","beschreibt","charakterisiert"],explicit:["es zeigt sich","festzustellen ist","offenbar"],implicit:["Zustand oder Lage wird als Befund beschrieben"],confuse:["bewertet","appelliert"],example:"Der Autor diagnostiziert, moderne Gesellschaften seien von Angst und Misstrauen geprägt."},
+{area:"Begründen / Stützen",verbs:["begründet","stützt","belegt","rechtfertigt","führt zurück auf","leitet her","verweist auf","macht geltend"],explicit:["weil","denn","deshalb","daher","aus diesem Grund"],implicit:["beantwortet die Warum-Frage","liefert Ursache oder Bedingung"],confuse:["behauptet","erläutert"],example:"Der Autor begründet seinen Optimismus damit, dass der Mensch der Anlage nach gesellig sei."},
+{area:"Erläutern / Erklären",verbs:["erläutert","erklärt","entfaltet","entwickelt","führt aus","legt dar","zeigt auf","verdeutlicht"],explicit:["das heißt","genauer","nämlich","dies bedeutet"],implicit:["Zusammenhang wird ausgeführt","Gedanke wird nachvollziehbar gemacht"],confuse:["begründet","veranschaulicht"],example:"Der Autor erläutert, wie aus Familienverbänden größere soziale Verbände entstanden seien."},
+{area:"Veranschaulichen",verbs:["veranschaulicht","illustriert","exemplifiziert","konkretisiert"],explicit:["zum Beispiel","etwa","beispielsweise"],implicit:["konkreter Fall oder Analogie macht einen abstrakten Gedanken anschaulich"],confuse:["erläutert","belegt"],example:"Der Autor veranschaulicht die soziale Anlage des Menschen am Beispiel der Brutpflege."},
+{area:"Präzisieren / Differenzieren",verbs:["präzisiert","differenziert","unterscheidet","grenzt ab","ergänzt","erweitert"],explicit:["genauer gesagt","einerseits / andererseits","nicht nur / sondern auch"],implicit:["Aussage wird genauer gefasst","zwei Aspekte werden unterschieden"],confuse:["fasst zusammen","relativiert"],example:"Der Autor differenziert, der Mensch besitze sowohl prosoziale als auch destruktive Potenziale."},
+{area:"Einräumen / Konzession",verbs:["räumt ein","gesteht zu","erkennt an","konzediert"],explicit:["zwar","gewiss","sicherlich","es stimmt"],implicit:["Gegenaspekt wird anerkannt, bevor die eigene Position fortgeführt wird"],confuse:["weist zurück","begründet"],example:"Der Autor räumt ein, Aggression und Intoleranz seien dem Menschen angeboren."},
+{area:"Einschränken / Relativieren",verbs:["schränkt ein","relativiert","begrenzt","nuanciert","korrigiert"],explicit:["aber","jedoch","allerdings","keineswegs","nicht immer"],implicit:["Geltungsbereich wird begrenzt","Missverständnis wird vermieden"],confuse:["weist zurück","widerspricht"],example:"Der Autor schränkt ein, seine optimistische Darlegung verharmlose Aggressionen nicht."},
+{area:"Gegenposition / Kritik",verbs:["widerspricht","weist zurück","lehnt ab","verwirft","bestreitet","entkräftet","kritisiert","wendet ein"],explicit:["keinesfalls","nicht","vielmehr","dagegen","im Gegensatz dazu"],implicit:["Gegenposition wird abgelehnt","Alternative wird gegen eine These gesetzt"],confuse:["schränkt ein","relativiert"],example:"Der Autor weist die These zurück, der Mensch sei seinem Wesen nach mörderisch."},
+{area:"Folgern / Ergebnis",verbs:["folgert","schließt","zieht den Schluss","kommt zu dem Ergebnis","leitet daraus ab","gelangt zu dem Ergebnis"],explicit:["also","folglich","somit","daher","daraus folgt"],implicit:["Konsequenz aus vorherigen Überlegungen"],confuse:["fasst zusammen","begründet"],example:"Der Autor folgert, es gebe Grund zum Optimismus."},
+{area:"Zusammenfassen / Resümieren",verbs:["fasst zusammen","resümiert","bündelt","bringt auf den Punkt","hält fest"],explicit:["zusammenfassend","abschließend","insgesamt"],implicit:["Schlusssatz bündelt mehrere Gedanken"],confuse:["folgert","belegt"],example:"Der Autor resümiert, im Menschen lägen Potenziale zum Guten und zur Selbstvernichtung."},
+{area:"Appell / Normative Konsequenz",verbs:["appelliert","fordert","fordert dazu auf","plädiert für","empfiehlt","mahnt","warnt","ruft auf"],explicit:["wir müssen","man sollte","es ist nötig","wenn wir"],implicit:["Handlungsorientierung","normative Konsequenz","Warnung oder Zukunftsprognose"],confuse:["folgert","diagnostiziert"],example:"Der Autor appelliert daran, Kommunikationsbarrieren abzubauen."}
+];
+
+const TASKS = [
+{type:"single",kind:"Textstelle → Funktion",tag:"function",text:"Angst und Misstrauen beherrschten früher nur die Beziehungen zu den Mitgliedern fremder Gesellschaften. Mit der Bildung der anonymen Gesellschaften beginnen wir auch unserem Nächsten zu misstrauen.",source:"Eibl-Eibesfeldt, Z. 1–4",prompt:"Welche argumentative Funktion erfüllt diese Textstelle am ehesten?",options:[
+["Sie eröffnet das Problem moderner Massengesellschaften, indem sie eine Ausweitung von Misstrauen beschreibt.",true],
+["Sie begründet bereits biologisch, dass der Mensch von Natur aus gesellig sei.",false,"function"],
+["Sie fasst abschließend zusammen, dass der Mensch gute und destruktive Potenziale habe.",false,"function"],
+["Sie weist ein radikal pessimistisches Menschenbild ausdrücklich zurück.",false,"function"]],feedback:"Die Passage eröffnet die Krisendiagnose. Passend wären z. B. „problematisiert“ oder „diagnostiziert“."},
+{type:"single",kind:"Textstelle → Funktion",tag:"function",text:"Angst verschärft den Kampf um die Machtpositionen und schaltet Rücksichtnahme aus.",source:"Eibl-Eibesfeldt, Z. 4–6",prompt:"Welche Wiedergabe ist am präzisesten?",options:[
+["Der Autor begründet die Krisendiagnose, indem er Angst als Ursache für Konkurrenz und fehlende Rücksichtnahme anführt.",true],
+["Der Autor räumt ein, dass Geselligkeit nur ein kulturell erworbenes Verhalten sei.",false,"function"],
+["Der Autor resümiert, der Mensch besitze zugleich Potenziale zum Guten und zur Selbstvernichtung.",false,"function"],
+["Der Autor fordert dazu auf, Kommunikationsbarrieren abzubauen.",false,"function"]],feedback:"Hier wird die Krisendiagnose kausal gestützt: Angst verschärfe Machtkämpfe."},
+{type:"single",kind:"Textstelle → Funktion",tag:"function",text:"Wir befinden uns sicher in einer gesellschaftlichen Krise, aber als vernunftbegabte Wesen können wir die weitere Entwicklung steuern.",source:"Eibl-Eibesfeldt, Z. 10–12",prompt:"Welche Funktion hat das „aber“ in dieser Textstelle?",options:[
+["Es leitet eine Gegenperspektive zur Krisendiagnose ein: Trotz Krise sei Steuerung möglich.",true],
+["Es weist die Krisendiagnose zurück, indem der Autor bestreitet, dass es eine Krise gebe.",false,"function"],
+["Es begründet die Entstehung sozialer Verbände durch Brutpflege.",false,"function"],
+["Es fasst die Schlussposition zusammen, dass gute und destruktive Potenziale gleichrangig seien.",false,"function"]],feedback:"Die Passage differenziert: Krise ja, aber kein Determinismus."},
+{type:"single",kind:"Textstelle → Verb",tag:"verb",text:"Unsere biologische Untersuchung des menschlichen Verhaltens hat zunächst einmal gezeigt, dass der uns angeborene Aggressionstrieb natürliche Gegenspieler hat.",source:"Eibl-Eibesfeldt, Z. 16–19",prompt:"Welches performative Verb passt am besten?",options:[
+["stellt als These heraus",true],
+["veranschaulicht",false,"verb"],
+["appelliert",false,"verb"],
+["resümiert",false,"verb"]],feedback:"Die Passage formuliert einen zentralen Befund, der den weiteren Gedankengang trägt."},
+{type:"single",kind:"Textstelle → Funktion",tag:"function",text:"Ja, es besteht ein starker, uns angeborener Drang zur Geselligkeit. Alle diese gruppenbindenden Mechanismen sind stammesgeschichtlich sehr alt.",source:"Eibl-Eibesfeldt, Z. 20–23",prompt:"Welche Beschreibung passt am besten?",options:[
+["Der Autor präzisiert seine These, indem er den sozialen Drang als angeboren und stammesgeschichtlich alt kennzeichnet.",true],
+["Der Autor weist zurück, dass es überhaupt angeborene soziale Mechanismen gebe.",false,"function"],
+["Der Autor fordert dazu auf, gesellschaftliche Normen rein kulturell abzuleiten.",false,"function"],
+["Der Autor fasst lediglich die Anfangsdiagnose von Angst und Misstrauen zusammen.",false,"function"]],feedback:"Die zentrale These wird genauer gefasst."},
+{type:"single",kind:"Textstelle → Funktion",tag:"function",text:"Mit dieser „Erfindung“ erwarben Vögel und Säuger unabhängig voneinander die Fähigkeit zum gegenseitigen Beistand und damit zur Bildung altruistischer Verbände.",source:"Eibl-Eibesfeldt, Z. 25–29",prompt:"Welche Funktion übernimmt diese Passage?",options:[
+["Sie erläutert die biologische Entwicklung sozialer Bindungsfähigkeit.",true],
+["Sie problematisiert das Misstrauen in anonymen Gesellschaften.",false,"function"],
+["Sie schränkt ein, dass soziale Anlagen grundsätzlich nicht wirksam werden könnten.",false,"function"],
+["Sie resümiert die Schlussposition des Textes.",false,"function"]],feedback:"Die Passage erklärt einen Entwicklungszusammenhang."},
+{type:"single",kind:"Textstelle → Verb",tag:"verb",text:"Aus den Familienverbänden wuchsen die Großfamilien, die Rudel und schließlich auch die anonymen geschlossenen Verbände der Säuger und des Menschen.",source:"Eibl-Eibesfeldt, Z. 32–35",prompt:"Welches Verb ist hier präziser als das allgemeine „sagt“?",options:[
+["erläutert",true],
+["weist zurück",false,"verb"],
+["appelliert",false,"verb"],
+["konzediert",false,"verb"]],feedback:"Die Textstelle führt eine Entwicklung aus. „Erläutert“ ist hier passend."},
+{type:"single",kind:"Textstelle → Funktion",tag:"function",text:"Ich glaube, dass wir nur deshalb Grund zum Optimismus haben, weil wir der Anlage nach gesellige Wesen sind.",source:"Eibl-Eibesfeldt, Z. 38–41",prompt:"Welche Wiedergabe trifft den argumentativen Schritt?",options:[
+["Der Autor folgert aus der biologischen Anlage zur Geselligkeit einen begrenzten Grund zum Optimismus.",true],
+["Der Autor eröffnet die Problemfrage, ob moderne Gesellschaften anonym seien.",false,"function"],
+["Der Autor veranschaulicht die These an einem konkreten Beispiel der Brutpflege.",false,"function"],
+["Der Autor bestreitet, dass der Mensch soziale Anlagen habe.",false,"function"]],feedback:"Die Passage zieht eine Konsequenz aus der vorherigen Argumentation."},
+{type:"single",kind:"Textstelle → Funktion",tag:"function",text:"Wir müssen nicht alle ethischen Normen kulturell ableiten, manche sind in unserer Konstitution verankert, und das gibt uns eine gewisse Sicherheit.",source:"Eibl-Eibesfeldt, Z. 43–45",prompt:"Welche Funktion hat diese Stelle im Gedankengang?",options:[
+["Sie präzisiert die Folgerung, indem sie biologische Orientierung und ethische Normen verbindet.",true],
+["Sie weist zurück, dass es biologisch verankerte Orientierungen gebe.",false,"function"],
+["Sie erläutert die Entstehung von Familienverbänden aus Brutpflege.",false,"function"],
+["Sie diagnostiziert erneut Angst und Misstrauen in der Massengesellschaft.",false,"function"]],feedback:"Die Folgerung wird auf die Frage ethischer Normen bezogen."},
+{type:"single",kind:"Textstelle → Funktion",tag:"function",text:"Die Neigung zur Intoleranz und zur Aggression ist uns sicher angeboren, aber die These vom mörderischen Wesen Mensch lässt sich nicht ernsthaft vertreten.",source:"Eibl-Eibesfeldt, Z. 46–49",prompt:"Welche Formulierung rekonstruiert die Funktion am genauesten?",options:[
+["Der Autor räumt Aggression ein, weist aber ein radikal pessimistisches Menschenbild zurück.",true],
+["Der Autor begründet die Anfangsdiagnose, indem er Misstrauen in anonymen Gesellschaften beschreibt.",false,"function"],
+["Der Autor erläutert die Entstehung altruistischer Verbände aus der Brutpflege.",false,"function"],
+["Der Autor appelliert daran, Kommunikationsbarrieren abzubauen.",false,"function"]],feedback:"Die Passage kombiniert Konzession und Zurückweisung."},
+{type:"single",kind:"Textstelle → Funktion",tag:"function",text:"Mit dieser grundsätzlich sehr optimistischen Darlegung möchte ich keineswegs unsere Aggressionen verniedlichen.",source:"Eibl-Eibesfeldt, Z. 51–53",prompt:"Welche argumentative Funktion erfüllt die Textstelle?",options:[
+["Der Autor schränkt sein optimistisches Menschenbild ein, um ein Missverständnis zu vermeiden.",true],
+["Der Autor bestreitet vollständig, dass Aggressionen existieren.",false,"function"],
+["Der Autor begründet die Entstehung sozialer Verbände durch Brutpflege.",false,"function"],
+["Der Autor resümiert seine Schlussposition.",false,"function"]],feedback:"„Keineswegs“ markiert hier keine Widerlegung der eigenen These, sondern eine Einschränkung."},
+{type:"single",kind:"Textstelle → Funktion",tag:"function",text:"Lieblose Erziehung und Verhetzung schaffen den lieblosen Menschen und verschütten seine ihm angeborene Nächstenliebe.",source:"Eibl-Eibesfeldt, Z. 54–56",prompt:"Welche Funktion hat diese Textstelle?",options:[
+["Der Autor erklärt negative Ausprägungen menschlichen Verhaltens durch Erziehung und Verhetzung.",true],
+["Der Autor behauptet, Nächstenliebe sei ausschließlich kulturell erzeugt.",false,"function"],
+["Der Autor fasst die biologische Entwicklung von Familienverbänden zusammen.",false,"function"],
+["Der Autor stellt die Leitfrage nach Gut und Böse erstmals auf.",false,"function"]],feedback:"Die Stelle erklärt, weshalb positive Anlagen nicht immer wirksam werden."},
+{type:"single",kind:"Textstelle → Funktion",tag:"function",text:"Wenn wir aufhören Kommunikationsbarrieren zu errichten und unsere Mitmenschen zu verteufeln, stattdessen das Bindende hervorheben, dann wird unseren Enkeln eine glückliche Zukunft beschieden sein.",source:"Eibl-Eibesfeldt, Z. 56–61",prompt:"Welche Wiedergabe ist am treffendsten?",options:[
+["Der Autor appelliert daran, trennende Feindbilder abzubauen und das Verbindende hervorzuheben.",true],
+["Der Autor schränkt seine optimistische Position ein, indem er Aggression nicht verharmlost.",false,"function"],
+["Der Autor begründet die Geselligkeit des Menschen durch Brutpflege.",false,"function"],
+["Der Autor diagnostiziert zu Beginn Angst und Misstrauen in modernen Gesellschaften.",false,"function"]],feedback:"Die Wenn-dann-Struktur enthält eine Handlungsorientierung."},
+{type:"single",kind:"Textstelle → Funktion",tag:"function",text:"Die Potenzen zum Guten sind uns biologisch ebenso gegeben wie jene zur Selbstvernichtung.",source:"Eibl-Eibesfeldt, Z. 61–63",prompt:"Welche Funktion erfüllt dieser Schlusssatz?",options:[
+["Er fasst die vermittelnde Schlussposition zusammen: Der Mensch habe prosoziale und destruktive Anlagen.",true],
+["Er begründet die gesellschaftliche Krise mit Angst und Misstrauen.",false,"function"],
+["Er fordert dazu auf, Kommunikationsbarrieren abzubauen.",false,"function"],
+["Er weist zurück, dass es Potenziale zum Guten gebe.",false,"function"]],feedback:"Der Satz bündelt die Gesamtaussage des Textes."},
+{type:"single",kind:"Konjunktiv I",tag:"konjunktiv",text:"Wir befinden uns sicher in einer gesellschaftlichen Krise.",source:"Eibl-Eibesfeldt, Z. 10–11",prompt:"Welche Wiedergabe ist formal und fachlich am besten?",options:[
+["Der Autor diagnostiziert, die moderne Gesellschaft befinde sich in einer Krise.",true],
+["Der Autor diagnostiziere, die moderne Gesellschaft befinde sich in einer Krise.",false,"konjunktiv"],
+["Der Autor diagnostiziert, die moderne Gesellschaft befindet sich in einer Krise.",false,"konjunktiv"],
+["Der Autor hat recht, dass sich die moderne Gesellschaft in einer Krise befinde.",false,"distanz"]],feedback:"Das performative Verb bleibt im Indikativ; die indirekte Rede steht im Konjunktiv I."},
+{type:"single",kind:"Konjunktiv I",tag:"konjunktiv",text:"Ja, es besteht ein starker, uns angeborener Drang zur Geselligkeit.",source:"Eibl-Eibesfeldt, Z. 20–21",prompt:"Welche Formulierung ist korrekt?",options:[
+["Der Autor hebt hervor, es bestehe ein angeborener Drang zur Geselligkeit.",true],
+["Der Autor hebe hervor, es bestehe ein angeborener Drang zur Geselligkeit.",false,"konjunktiv"],
+["Der Autor hebt hervor, es besteht ein angeborener Drang zur Geselligkeit.",false,"konjunktiv"],
+["Der Autor hebt hervor, es bestünde ein angeborener Drang zur Geselligkeit.",false,"konjunktiv"]],feedback:"„Bestehe“ ist die passende Konjunktiv-I-Form. Das performative Verb steht im Indikativ."},
+{type:"single",kind:"Ersatzform Konjunktiv II",tag:"konjunktiv",text:"Alle diese gruppenbindenden Mechanismen sind stammesgeschichtlich sehr alt.",source:"Eibl-Eibesfeldt, Z. 21–23",prompt:"Welche Formulierung markiert die indirekte Rede am eindeutigsten?",options:[
+["Der Autor hebt hervor, diese gruppenbindenden Mechanismen seien stammesgeschichtlich sehr alt.",true],
+["Der Autor hebt hervor, diese gruppenbindenden Mechanismen sind stammesgeschichtlich sehr alt.",false,"konjunktiv"],
+["Der Autor hebe hervor, diese gruppenbindenden Mechanismen seien stammesgeschichtlich sehr alt.",false,"konjunktiv"],
+["Der Autor hebt hervor, diese gruppenbindenden Mechanismen wären stammesgeschichtlich sehr alt.",false,"konjunktiv"]],feedback:"Bei „sein“ ist der Konjunktiv I klar erkennbar: „seien“. Konjunktiv II ist hier nicht nötig."},
+{type:"single",kind:"Ersatzform Konjunktiv II",tag:"konjunktiv",text:"Die Potenzen zum Guten sind uns biologisch ebenso gegeben wie jene zur Selbstvernichtung.",source:"Eibl-Eibesfeldt, Z. 61–63",prompt:"Welche Wiedergabe ist am besten?",options:[
+["Der Autor resümiert, dem Menschen seien biologische Potenziale zum Guten ebenso gegeben wie solche zur Selbstvernichtung.",true],
+["Der Autor resümiert, dem Menschen wären biologische Potenziale zum Guten ebenso gegeben wie solche zur Selbstvernichtung.",false,"konjunktiv"],
+["Der Autor resümiere, dem Menschen seien biologische Potenziale zum Guten ebenso gegeben wie solche zur Selbstvernichtung.",false,"konjunktiv"],
+["Der Autor resümiert, dem Menschen sind biologische Potenziale zum Guten ebenso gegeben wie solche zur Selbstvernichtung.",false,"konjunktiv"]],feedback:"„Seien“ ist hier als Konjunktiv I erkennbar. Das performative Verb bleibt im Indikativ."},
+{type:"single",kind:"Ersatzform Konjunktiv II",tag:"konjunktiv",text:"Wir können die weitere Entwicklung steuern.",source:"Eibl-Eibesfeldt, Z. 11–12",prompt:"Welche Wiedergabe ist am besten?",options:[
+["Der Autor betont, als vernunftbegabte Wesen könnten Menschen die weitere Entwicklung steuern.",true],
+["Der Autor betont, als vernunftbegabte Wesen können Menschen die weitere Entwicklung steuern.",false,"konjunktiv"],
+["Der Autor betone, als vernunftbegabte Wesen könnten Menschen die weitere Entwicklung steuern.",false,"konjunktiv"],
+["Der Autor betont, als vernunftbegabte Wesen können Menschen die weitere Entwicklung steuerten.",false,"konjunktiv"]],feedback:"Bei der dritten Person Plural ist der Konjunktiv I oft nicht vom Indikativ zu unterscheiden. Daher ist „könnten“ als Ersatzform sinnvoll."},
+{type:"single",kind:"Fehler erkennen",tag:"konjunktiv",text:"Schülerformulierung: „Der Autor begründe, der Mensch sei der Anlage nach gesellig.“",source:"bezogen auf Z. 38–41",prompt:"Welche Diagnose passt?",options:[
+["Das performative Verb sollte nicht im Konjunktiv I stehen; besser: „Der Autor begründet/folgert, …“",true],
+["Die indirekte Rede fehlt vollständig, weil „sei“ nicht im Konjunktiv steht.",false,"konjunktiv"],
+["Die Formulierung ist falsch, weil performative Verben nie verwendet werden dürfen.",false,"verb"],
+["Die Formulierung ist korrekt, weil alle Verben im Satz im Konjunktiv stehen müssen.",false,"konjunktiv"]],feedback:"Nicht das performative Verb, sondern die wiedergegebene Aussage wird im Konjunktiv markiert."},
+{type:"single",kind:"Fehler erkennen",tag:"distanz",text:"Schülerformulierung: „Eibl-Eibesfeldt hat recht, dass der Mensch eigentlich freundlich ist.“",source:"bezogen auf Aufgabe 1",prompt:"Welcher Fehler liegt vor?",options:[
+["Die Formulierung vermischt distanzierte Wiedergabe mit eigener Bewertung.",true],
+["Das Problem besteht nur darin, dass kein direktes Zitat verwendet wird.",false,"distanz"],
+["Die Formulierung ist korrekt, weil Aufgabe 1 eine Stellungnahme verlangt.",false,"distanz"],
+["Die Formulierung ist falsch, weil der Name des Autors genannt wird.",false,"distanz"]],feedback:"In Aufgabe 1 wird rekonstruiert, nicht bewertet."}
+];
+
+const ERR={function:"Argumentative Funktion",verb:"Performatives Verb",konjunktiv:"Konjunktiv",distanz:"Distanzierte Wiedergabe"};
+let stats=JSON.parse(localStorage.getItem("argumentor21Stats")||"{}"); for(const k of Object.keys(ERR)) if(!(k in stats)) stats[k]=0;
+let queue=[],idx=0,score=0,modeName="",answered=false,selected=null;
+function shuffle(a){return [...a].sort(()=>Math.random()-.5)}
+function save(){localStorage.setItem("argumentor21Stats",JSON.stringify(stats))}
+function updateHeader(){const total=queue.length||0;document.getElementById("progressText").textContent=total?`${Math.min(idx+1,total)} / ${total}`:"Noch keine Runde gestartet";document.getElementById("progressBar").style.width=total?`${Math.min(idx,total)/total*100}%`:"0%";document.getElementById("scoreText").textContent=score;document.getElementById("roundText").textContent=modeName||"Training wählen"}
+function showTab(t){document.getElementById("trainView").classList.toggle("hidden",t!=="train");document.getElementById("dbView").classList.toggle("hidden",t!=="db");document.getElementById("guideView").classList.toggle("hidden",t!=="guide");["Train","Db","Guide"].forEach(x=>document.getElementById("tab"+x).classList.remove("active"));document.getElementById("tab"+t[0].toUpperCase()+t.slice(1)).classList.add("active");if(t==="db")renderDB()}
+function resetTraining(){for(const k of Object.keys(ERR))stats[k]=0;save();alert("Das Training wurde zurückgesetzt.")}
+function startGame(n,name){showTab("train");modeName=name;score=0;idx=0;const weighted=[];TASKS.forEach(t=>{let w=1+Math.min(3,stats[t.tag]||0);for(let i=0;i<w;i++)weighted.push(t)});queue=[];while(queue.length<n){let t=weighted[Math.floor(Math.random()*weighted.length)];if(!queue.includes(t)||queue.length>15)queue.push(t)}document.getElementById("summary").classList.add("hidden");document.getElementById("game").classList.remove("hidden");renderTask()}
+function renderTask(){updateHeader();answered=false;selected=null;const q=queue[idx];q._opts=shuffle(q.options.map(o=>({text:o[0],correct:o[1],err:o[2]})));document.getElementById("game").innerHTML=`<span class="badge">${q.kind}</span><div class="prompt">${q.prompt}</div><div class="context">${q.text}</div><div class="source">${q.source}</div><div class="options">${q._opts.map((o,i)=>`<button class="option" onclick="selectOption(${i})">${o.text}</button>`).join("")}</div><div id="feedback" class="feedback"></div><div class="actions"><button onclick="check()">Antwort prüfen</button><button class="secondary" id="nextBtn" onclick="next()" disabled>Weiter</button></div>`}
+function selectOption(i){if(answered)return;selected=i;[...document.querySelectorAll(".option")].forEach((b,j)=>b.classList.toggle("selected",i===j))}
+function check(){if(answered)return;const q=queue[idx],fb=document.getElementById("feedback");if(selected===null){fb.className="feedback bad";fb.innerHTML="Wähle zuerst eine Antwort aus.";return}const opt=q._opts[selected];[...document.querySelectorAll(".option")].forEach((b,i)=>{if(q._opts[i].correct)b.classList.add("correct");if(i===selected&&!q._opts[i].correct)b.classList.add("wrong")});if(opt.correct){score++;fb.className="feedback good";fb.innerHTML=`<strong>Richtig.</strong> ${q.feedback}`}else{stats[opt.err||q.tag]=(stats[opt.err||q.tag]||0)+1;save();fb.className="feedback bad";fb.innerHTML=`<strong>Noch nicht ganz.</strong> ${q.feedback}`}answered=true;document.getElementById("nextBtn").disabled=false;updateHeader()}
+function next(){idx++;if(idx>=queue.length)finish();else renderTask()}
+function finish(){document.getElementById("game").classList.add("hidden");document.getElementById("summary").classList.remove("hidden");document.getElementById("progressBar").style.width="100%";document.getElementById("progressText").textContent=`${queue.length} / ${queue.length}`;const entries=Object.entries(stats).sort((a,b)=>b[1]-a[1]).filter(x=>x[1]>0).slice(0,4);const errHTML=entries.length?entries.map(([k,v])=>`<div class="err"><strong>${ERR[k]}</strong><span>${v} registrierte Unsicherheit(en)</span></div>`).join(""):'<p class="small">Kein eindeutiger Trainingsschwerpunkt erkennbar.</p>';document.getElementById("summary").innerHTML=`<span class="badge">Auswertung</span><div class="prompt">Runde abgeschlossen</div><p>Du hast <strong>${score}</strong> von <strong>${queue.length}</strong> Punkt(en) erreicht.</p><h3>Dein Trainingsschwerpunkt</h3><p class="small">Die nächste Runde enthält automatisch mehr Aufgaben zu Bereichen, in denen dir noch Fehler unterlaufen sind.</p><div class="errgrid">${errHTML}</div><div class="actions"><button onclick="startGame(${queue.length},'${modeName}')">Gleiche Rundengröße erneut</button><button class="secondary" onclick="startGame(12,'Klausurtraining')">Neue 12er-Runde</button></div>`;updateHeader()}
+function renderDB(){const rows=DB.map(d=>`<tr><td>${d.area}</td><td>${d.verbs.map(v=>`<span class="chip">${v}</span>`).join(" ")}</td><td>${d.explicit.join("; ")}</td><td>${d.implicit.join("; ")}</td><td>${d.confuse.join("; ")}</td><td>${d.example}</td></tr>`).join("");document.getElementById("dbTable").innerHTML=`<thead><tr><th>Funktion</th><th>Verben</th><th>Explizite Marker</th><th>Implizite Marker</th><th>Typische Verwechslung</th><th>Beispiel</th></tr></thead><tbody>${rows}</tbody>`}
+updateHeader();
+</script>
+</body>
+</html>
